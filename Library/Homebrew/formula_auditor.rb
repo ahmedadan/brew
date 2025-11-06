@@ -937,7 +937,7 @@ module Homebrew
       previous_version_info, origin_head_version_info = committed_version_info
       return if origin_head_version_info.empty?
 
-      previous_compatibility_version = previous_version_info[:compatibility_version] || 0
+      previous_compatibility_version = origin_head_version_info[:compatibility_version] || 0
       current_compatibility_version = formula.compatibility_version || previous_compatibility_version
 
       if current_compatibility_version < previous_compatibility_version
@@ -982,7 +982,7 @@ module Homebrew
 
       current_version_scheme = formula.version_scheme
 
-      previous_version_info, = committed_version_info
+      _, origin_head_version_info = committed_version_info
       previous_version_scheme = previous_version_info[:version_scheme]
       return if previous_version_scheme.nil?
 
