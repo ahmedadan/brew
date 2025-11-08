@@ -204,7 +204,7 @@ module Kernel
     Formulary.factory_stub(formula_name).ensure_installed!(reason:, latest:).opt_bin/name
   end
 
-  BYTE_UNITS = T.let({ GB: 1_073_741_824, MB: 1_048_576, KB: 1_024 }.freeze, T::Hash[Symbol, Integer])
+  BYTE_UNITS = T.let({ GiB: 1_073_741_824, MiB: 1_048_576, KiB: 1_024 }.freeze, T::Hash[Symbol, Integer])
   private_constant :BYTE_UNITS
 
   sig {

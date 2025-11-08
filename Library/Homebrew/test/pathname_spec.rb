@@ -29,13 +29,13 @@ RSpec.describe Pathname do
     describe "#abv" do
       context "when called on a directory" do
         it "returns a string with the file count and disk usage" do
-          expect(dir.abv).to eq("3 files, 1MB")
+          expect(dir.abv).to eq("3 files, 1MiB")
         end
       end
 
       context "when called on a file" do
         it "returns the disk usage" do
-          expect((dir/"a-file").abv).to eq("1MB")
+          expect((dir/"a-file").abv).to eq("1MiB")
         end
       end
     end

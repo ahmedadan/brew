@@ -264,7 +264,7 @@ module Homebrew
       return message[0, available_width].to_s if fetched_size.blank?
 
       size_length = 5
-      unit_length = 2
+      unit_length = 3
       size_formatting_string = "%<size>#{size_length}.1f%<unit>#{unit_length}s"
       size, unit = disk_usage_readable_size_unit(fetched_size, per_thousand: true)
       formatted_fetched_size = format(size_formatting_string, size:, unit:)
