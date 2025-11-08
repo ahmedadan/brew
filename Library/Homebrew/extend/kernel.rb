@@ -204,22 +204,28 @@ module Kernel
     Formulary.factory_stub(formula_name).ensure_installed!(reason:, latest:).opt_bin/name
   end
 
-  sig { params(size_in_bytes: T.any(Integer, Float)).returns([T.any(Integer, Float), String]) }
-  def disk_usage_readable_size_unit(size_in_bytes)
-    if size_in_bytes.abs >= 1_048_576_000
-      size = size_in_bytes.to_f / 1_073_741_824
-      unit = "GB"
-    elsif size_in_bytes.abs >= 1_024_000
-      size = size_in_bytes.to_f / 1_048_576
-      unit = "MB"
-    elsif size_in_bytes.abs >= 1_000
-      size = size_in_bytes.to_f / 1_024
-      unit = "KB"
+  BYTE_UNITS = T.let({ GB: 1_073_741_824, MB: 1_048_576, KB: 1_024 }.freeze, T::Hash[Symbol, Integer])
+  private_constant :BYTE_UNITS
+
+  sig {
+    params(
+      size_in_bytes: T.any(Integer, Float),
+      per_thousand:  T::Boolean,
+    ).returns([T.any(Integer, Float), Symbol])
+  }
+  def disk_usage_readable_size_unit(size_in_bytes, per_thousand: false)
+    starting_values = if per_thousand
+      [1_048_576_000, 1_024_000, 1_000]
     else
-      size = size_in_bytes
-      unit = "B"
+      BYTE_UNITS.values
     end
-    [size, unit]
+
+    BYTE_UNITS.zip(starting_values) do |(unit, unit_bytes), starting_value|
+      next if size_in_bytes.abs < T.must(starting_value)
+
+      return [size_in_bytes.to_f / unit_bytes, unit]
+    end
+    [size_in_bytes, :B]
   end
 
   sig { params(size_in_bytes: T.any(Integer, Float)).returns(String) }
